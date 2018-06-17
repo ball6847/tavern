@@ -7,12 +7,13 @@ import pytest
 from future.utils import raise_from
 
 import yaml
-from yaml.reader import Reader
-from yaml.scanner import Scanner
-from yaml.parser import Parser
-from yaml.composer import Composer
-from yaml.constructor import SafeConstructor
-from yaml.resolver import Resolver
+from yaml.loader import Loader
+# from yaml.reader import Reader
+# from yaml.scanner import Scanner
+# from yaml.parser import Parser
+# from yaml.composer import Composer
+# from yaml.constructor import SafeConstructor
+# from yaml.resolver import Resolver
 
 from tavern.util.exceptions import BadSchemaError
 
@@ -25,30 +26,32 @@ def makeuuid(loader, node):
     return str(uuid.uuid4())
 
 
-class RememberComposer(Composer):
+# class RememberComposer(Composer):
 
-    """A composer that doesn't forget anchors across documents
-    """
+#     """A composer that doesn't forget anchors across documents
+#     """
 
-    def compose_document(self):
-        # Drop the DOCUMENT-START event.
-        self.get_event()
+#     def compose_document(self):
+#         # Drop the DOCUMENT-START event.
+#         self.get_event()
 
-        # Compose the root node.
-        node = self.compose_node(None, None)
+#         # Compose the root node.
+#         node = self.compose_node(None, None)
 
-        # Drop the DOCUMENT-END event.
-        self.get_event()
+#         # Drop the DOCUMENT-END event.
+#         self.get_event()
 
-        # If we don't drop the anchors here, then we can keep anchors across
-        # documents.
-        # self.anchors = {}
+#         # If we don't drop the anchors here, then we can keep anchors across
+#         # documents.
+#         # self.anchors = {}
 
-        return node
+#         return node
 
 
+# just forget about RememberComposer for now
 # pylint: disable=too-many-ancestors
-class IncludeLoader(Reader, Scanner, Parser, RememberComposer, SafeConstructor, Resolver):
+# class IncludeLoader(Loader, Reader, Scanner, Parser, RememberComposer, SafeConstructor, Resolver):
+class IncludeLoader(Loader):
     """YAML Loader with `!include` constructor and which can remember anchors
     between documents"""
 
@@ -62,12 +65,13 @@ class IncludeLoader(Reader, Scanner, Parser, RememberComposer, SafeConstructor, 
         except AttributeError:
             self._root = os.path.curdir
 
-        Reader.__init__(self, stream)
-        Scanner.__init__(self)
-        Parser.__init__(self)
-        RememberComposer.__init__(self)
-        SafeConstructor.__init__(self)
-        Resolver.__init__(self)
+        Loader.__init__(self, stream)
+        # Reader.__init__(self, stream)
+        # Scanner.__init__(self)
+        # Parser.__init__(self)
+        # RememberComposer.__init__(self)
+        # SafeConstructor.__init__(self)
+        # Resolver.__init__(self)
 
 
 def construct_include(loader, node):

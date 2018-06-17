@@ -114,9 +114,7 @@ class YamlFile(pytest.File):
 
         try:
             # Convert to a list so we can catch parser exceptions
-            # all_tests = list(yaml.load_all(self.fspath.open(encoding="utf-8"), Loader=IncludeLoader))
-            # we need to remove Loader=IncludeLoader for now, since it convert our OrderedDict to something else
-            all_tests = list(yaml.load_all(self.fspath.open(encoding="utf-8")))
+            all_tests = list(yaml.load_all(self.fspath.open(encoding="utf-8"), Loader=IncludeLoader))
         except yaml.parser.ParserError as e:
             raise_from(exceptions.BadSchemaError, e)
 
