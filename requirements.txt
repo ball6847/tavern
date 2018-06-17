@@ -6,3 +6,4 @@ python-box
 future
 contextlib2
 stevedore
+oyaml

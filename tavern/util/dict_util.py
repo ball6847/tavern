@@ -27,7 +27,7 @@ def format_keys(val, variables):
     box_vars = Box(variables)
 
     if isinstance(val, dict):
-        formatted = {}
+        formatted = collections.OrderedDict()
         #formatted = {key: format_keys(val[key], box_vars) for key in val}
         for key in val:
             formatted[key] = format_keys(val[key], box_vars)
